@@ -1,7 +1,5 @@
-# import io
-# import requests
-# import wget
 import urllib.request
+
 
 if __name__ == '__main__':
 
@@ -15,6 +13,3 @@ if __name__ == '__main__':
             urllib.request.urlretrieve(url, file_name)
             num += 1
             
-
-
-        
