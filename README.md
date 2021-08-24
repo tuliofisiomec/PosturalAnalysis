@@ -18,6 +18,10 @@ It is important to focus your work on the right muscle groups so the client can 
 
 Scrape Google images for data
 
+### Tools:
+
+Selenium
+
 ## Clean:
 
 Filter out duplicate/irrelevant pictures
