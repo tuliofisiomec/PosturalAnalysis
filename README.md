@@ -1,5 +1,7 @@
 # Postural Analysis
 
+![app architechture](AppArchitecture.png)
+
 ## Goal:
 
 Based on an image of your posture, this application will suggest relevant muscle groups to target treatment on.
