@@ -4,22 +4,22 @@ from time import sleep
 
 class ImageURLScraper:
 
-    def __init__(self, query: str, max_links_to_fetch: int):
+    def __init__(self, query: str, number_of_times_to_scroll: int = 1):
         self.search_url = f'https://www.google.com/search?safe=off&site=&tbm=isch&source=hp&q={query}&oq={query}&gs_l=img'
-        self.max_links_to_fetch = max_links_to_fetch
         self.wd = webdriver.Chrome(executable_path='Driver/chromedriver')
-        self.time_to_sleep = 1
+        self.time_to_sleep = .5
         self.image_urls = set()
         self.thumbnails = []
+        self.number_of_times_to_scroll = number_of_times_to_scroll
 
     def load_page(self):
         self.wd.get(self.search_url)
 
-    def get_thumbnails(self, numer_of_times_to_scroll: int):
+    def get_thumbnails(self):
         '''
         grabs thumbnails from search page and scrolls for given times
         '''
-        for _ in range(numer_of_times_to_scroll):
+        for _ in range(self.number_of_times_to_scroll):
             self.scroll_to_end()
             self.thumbnails.extend(self.wd.find_elements_by_css_selector('img.Q4LuWd'))
 
@@ -54,14 +54,17 @@ class ImageURLScraper:
         # first load page
         self.load_page()
         # grab thumbnails
-        self.get_thumbnails(1)
+        self.get_thumbnails()
         print('number of thumbnails:', len(self.thumbnails))
         # extract image links from thumbnails
         self.extract_image_links_from_thumbnails()
         # write all image urls to a txt file
         self.write_urls_to_txt_file()
+        # quit when done
+        self.wd.quit()
 
 
 if __name__ == '__main__':
-    scraper = ImageURLScraper('dogs', 3)
+    # pass in query and how many times bot should scroll down on the results page (this results in more data)
+    scraper = ImageURLScraper('rounded shoulder posture vs normal')
     scraper.run()
