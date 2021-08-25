@@ -2,3 +2,5 @@
 venv
 *.txt
 dogs
+__pycache__
+RoundedShoulderRaw

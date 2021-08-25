@@ -22,7 +22,9 @@ Scrape Google images for data
 
 ### Tools:
 
-Selenium
+selenium (third pary library)
+
+urllib (python built-in library)
 
 ## Clean:
 
