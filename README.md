@@ -30,6 +30,10 @@ urllib (python built-in library)
 
 Filter out duplicate/irrelevant pictures
 
+### Tools:
+
+OpenCV (third pary library)
+
 ## Data Pipeline:
 
 1. Scrape google images for relevant image urls
