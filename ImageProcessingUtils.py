@@ -1,6 +1,24 @@
 import cv2
 
 
+class ImageSlicer:
+
+    def __init__(self, image_url: str):
+        self.image_url = image_url
+    
+    def slice_image(self):
+        img = cv2.imread(self.image_url)
+        width = img.shape[1]
+        cutoff = width // 2
+        s1 = img[:, :cutoff]
+        s2 = img[:, cutoff:]
+        cv2.imwrite('s1.jpeg', s1)
+        cv2.imwrite('s2.jpeg', s2)
+
+    def run(self):
+        self.slice_image()
+
+
 class ImageResizer:
 
     def __init__(self, image_url: str, new_width: int = 500, new_height: int = 300):
@@ -23,6 +41,7 @@ class ImageResizer:
 
 
 if __name__ == '__main__':
-    resizer = ImageResizer('RoundedShoulderRaw/rounded_shoulder_1.jpeg')
-    resizer.run()
-    
+    # resizer = ImageResizer('RoundedShoulderRaw/rounded_shoulder_1.jpeg')
+    # resizer.run()
+    slicer = ImageSlicer('RoundedShoulderRaw/rounded_shoulder_125.jpeg')
+    slicer.run()
