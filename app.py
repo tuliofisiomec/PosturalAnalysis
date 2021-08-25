@@ -1,5 +1,5 @@
 from ImageDownloader import ImageDownloader
-from ImageScraper import ImageURLScraper
+from ImageURLScraper import ImageURLScraper
 
 
 if __name__ == '__main__':
