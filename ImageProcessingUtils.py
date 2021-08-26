@@ -8,10 +8,16 @@ class ImageSlicer:
         self.image_directory = image_directory
 
     def slice_all_images(self):
+        '''
+        goes through a directory and slices the images in half
+        '''
         for f in os.listdir(self.image_directory):
             self.slice_image(f)
     
     def slice_image(self, img_file: str):
+        '''
+        cuts image in half
+        '''
         img = cv2.imread(f'{self.image_directory}/{img_file}')
         if img is not None:
             width = img.shape[1]
@@ -31,8 +37,15 @@ class ImageResizer:
         self.image_directory = image_directory
         self.uniform_size = 360
 
+    def resize_all_images(self):
+        for f in os.listdir(self.image_directory):
+            self.resize(f)
+
     def resize(self, image_file: str = None):
-        img = cv2.imread('SlicedImages/rounded_shoulder_158_s1.jpeg')
+        '''
+        resizes and adds padding to image
+        '''
+        img = cv2.imread(f'{self.image_directory}/{image_file}')
         old_size = img.shape[:2]
         ratio = float(self.uniform_size) / max(old_size)
         new_size = tuple([int(x*ratio) for x in old_size])
@@ -43,17 +56,12 @@ class ImageResizer:
         left, right = delta_w//2, delta_w - (delta_w//2)
         color = [0, 0, 0]
         final_image = cv2.copyMakeBorder(new_img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
-        cv2.imwrite('paddedimage.jpeg', final_image)
+        cv2.imwrite(f'PaddedImages/{image_file[:-5]}.jpeg', final_image)
     
     def run(self):
-        self.resize()
+        self.resize_all_images()
 
         
 if __name__ == '__main__':
-    # resizer = ImageResizer('RoundedShoulderRaw/rounded_shoulder_1.jpeg')
-    # resizer.run()
-    # slicer = ImageSlicer('RoundedShoulderRaw')
-    # slicer.run()
-    # padder = ImageResizer(None)
-    # padder.run()
-    pass
+    padder = ImageResizer('SlicedImages')
+    padder.run()
