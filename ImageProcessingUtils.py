@@ -2,6 +2,31 @@ import cv2
 import os
 
 
+class ImageAugmenter:
+    
+    def __init__(self, image_directory: str = None):
+        self.image_directory = image_directory
+
+    def flip_all_images(self):
+        '''
+        goes through a directory and adds a flipped version of the image
+        '''
+        for f in os.listdir(self.image_directory):
+            print(f)
+            self.flip_image(f)
+    
+    def flip_image(self, img_file: str):
+        try:
+            img = cv2.imread(f'{self.image_directory}/{img_file}')
+            flipped_img = img[:, ::-1, :]
+            cv2.imwrite(f'{self.image_directory}/{img_file[:-5]}_flipped.jpeg', flipped_img)
+        except Exception as e:
+            print(e)
+
+    def run(self):
+        self.flip_all_images()
+
+
 class ImageSlicer:
 
     def __init__(self, image_directory: str = None):
@@ -56,12 +81,15 @@ class ImageResizer:
         left, right = delta_w//2, delta_w - (delta_w//2)
         color = [0, 0, 0]
         final_image = cv2.copyMakeBorder(new_img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
-        cv2.imwrite(f'PaddedImages/{image_file[:-5]}.jpeg', final_image)
+        cv2.imwrite(f'ResizedImages/{image_file[:-5]}.jpeg', final_image)
     
     def run(self):
         self.resize_all_images()
 
         
 if __name__ == '__main__':
-    padder = ImageResizer('SlicedImages')
-    padder.run()
+    # padder = ImageResizer('SlicedImages')
+    # padder.run()
+
+    augmenter = ImageAugmenter('SelectedImages')
+    augmenter.run()
