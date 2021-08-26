@@ -3,6 +3,11 @@ import os
 
 
 class ImageAugmenter:
+    '''
+    Pass in target directory to constructor.
+    ImageAugmenter.run() will add a flipped and scaled version of every
+    photo in given directory.
+    '''
     
     def __init__(self, image_directory: str = None):
         self.image_directory = image_directory
@@ -23,11 +28,47 @@ class ImageAugmenter:
         except Exception as e:
             print(e)
 
+    def scale_and_crop_all_images(self):
+        '''
+        goes through a directory and adds a zoomed in version of the image
+        '''
+        for f in os.listdir(self.image_directory):
+            if f.endswith('.jpeg'):
+                self.scale_then_crop(f)
+
+    def scale_then_crop(self, img_file: str):
+        '''
+        scales and image, and crops image
+        '''
+        scaled_img = self.scale_up_image(img_file)
+        self.crop_image(scaled_img, img_file)
+
+    def scale_up_image(self, img_file: str):
+        '''
+        scales up and image and returns a numpy array of image
+        '''
+        img = cv2.imread(f'{self.image_directory}/{img_file}')
+        new_size = 450
+        resized = cv2.resize(img, (new_size, new_size), interpolation=cv2.INTER_LINEAR)
+        return resized
+
+    def crop_image(self, img_obj, img_file: str):
+        '''
+        takes numpy array of image, crops it to 360 X 360, then writes it to folder
+        '''
+        cropped = img_obj[20:380, 20:380]
+        cv2.imwrite(f'{self.image_directory}/{img_file[:-5]}_scaled.jpeg', cropped)
+
     def run(self):
         self.flip_all_images()
+        self.scale_and_crop_all_images()
 
 
 class ImageSlicer:
+    '''
+    Pass in target directory to constructor.
+    ImageSlicer.run() will slice all photos in a directory in half
+    '''
 
     def __init__(self, image_directory: str = None):
         self.image_directory = image_directory
@@ -57,7 +98,10 @@ class ImageSlicer:
 
 
 class ImageResizer:
-
+    '''
+    Pass in target directory to constructor.
+    Pads and resizes all images in a directory to 360 X 360
+    '''
     def __init__(self, image_directory: str):
         self.image_directory = image_directory
         self.uniform_size = 360
@@ -88,8 +132,19 @@ class ImageResizer:
 
         
 if __name__ == '__main__':
+
+    '''
+    Uncomment all these if you want to run the whole process from the start.
+    '''
+
+    # # First slice all the images in half
+    # slicer = ImageSlicer('RoundedShoulderRaw')
+    # slicer.run()
+
+    # # Next, pad and resize
     # padder = ImageResizer('SlicedImages')
     # padder.run()
 
-    augmenter = ImageAugmenter('SelectedImages')
-    augmenter.run()
+    # # Finally, add flipped and scaled versions of every image
+    # augmenter = ImageAugmenter('SelectedImages')
+    # augmenter.run()

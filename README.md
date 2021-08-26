@@ -34,7 +34,7 @@ urllib (python built-in library)
 
 3. Hand select images to use (can we automate this?)
 
-4. Mirror and scale images so model has more relevant data to learn from
+4. Add flipped and scaled versions of images so model has more relevant data to learn from
 
 5. Normalization/Edge detection
 
