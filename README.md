@@ -28,7 +28,19 @@ urllib (python built-in library)
 
 ## Clean:
 
-Filter out duplicate/irrelevant pictures
+1. Slice images in half (because images are: normal vs. bad posture)
+
+2. Add padding and resize images
+
+3. Hand select images to use (can we automate this?)
+
+4. Add flipped and scaled versions of images so model has more relevant data to learn from
+
+5. Normalization/Edge detection
+
+### Tools:
+
+OpenCV (third pary library)
 
 ## Data Pipeline:
 

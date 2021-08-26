@@ -4,3 +4,6 @@ venv
 dogs
 __pycache__
 RoundedShoulderRaw
+SlicedImages
+ResizedImages
+SelectedImages
