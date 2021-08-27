@@ -28,35 +28,47 @@ class URLGetter:
     Pass in how many urls you want to fetch in constructor.
     Use .search_query() to search for images.
     '''
-    def __init__(self, num_urls: int):
+    def __init__(self, num_urls: int, query: str):
+        self.query = query
         self.num_urls = num_urls
         self.urls = []
         self.KEY = os.getenv('GOOGLE_API_KEY')
         self.ENGINE_ID = os.getenv('SEARCH_ENGINE_ID')
-        self.URL = 'https://www.googleapis.com/customsearch/v1?searchType=image&key={}&cx={}&q={}&start={}'
+        self.URL = 'https://www.googleapis.com/customsearch/v1?searchType=image&key={key}&cx={engine_id}&q={query}&start={start_index}'
 
-    def fetch_urls(self, query: str):
+    def fetch_next_10_urls(self, request_url: str):
         '''
-        fetches 10 urls and puts into self.urls list
+        fetches 10 urls, puts each url into a dict and puts dicts into self.urls list
         '''
-        print('++++++++')
-        print(query)
-        print('++++++++')
-        res = requests.get(query)
+        res = requests.get(request_url)
         results = res.json()['items']
         for r in results:
-            print(r.get('link'))
-        print('--------------')
+            self.urls.append({
+                'search_query': self.query,
+                'url': r.get('link'),
+                'downloaded': False
+            })
 
-    def search_query(self, query: str):
+    def get_urls(self):
+        '''
+        fetches urls in batches of 10 and returns a list of dicts with format:
+        {
+            'search_query': <query>,
+            'url': <url>,
+            'downloaded': False
+        }
+        '''
         start_index = 1
-        end = ((self.num_urls // 10) + 1) + 1 # api fetches results in batches of 10
-        for _ in range(1, end):
-            query = self.URL.format(self.KEY, self.ENGINE_ID, query, start_index)
-            self.fetch_urls(query)
+        end = ((self.num_urls // 10) + 1) # api fetches results in batches of 10
+        for _ in range(0, end):
+            print(f'Batch count: {start_index} - {start_index + 10}')
+            request_url = self.URL.format(key=self.KEY, engine_id=self.ENGINE_ID, query=self.query, start_index=start_index)
+            self.fetch_next_10_urls(request_url)
             start_index += 10
+        return self.urls
 
 
 if __name__ == '__main__':
-    url_getter = URLGetter(40)
-    url_getter.search_query('dogs')
+    url_getter = URLGetter(1000, 'dogs')
+    urls = url_getter.get_urls()
+    print(urls)
