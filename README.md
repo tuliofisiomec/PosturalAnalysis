@@ -20,6 +20,12 @@ It is important to focus your work on the right muscle groups so the client can 
 
 Scrape Google images for data
 
+## Storage:
+
+### URL table
+
+![url table](UrlTable.png)
+
 ### Tools:
 
 selenium (third pary library)
@@ -36,7 +42,7 @@ urllib (python built-in library)
 
 4. Add flipped and scaled versions of images so model has more relevant data to learn from
 
-5. Normalization/Edge detection
+5. Normalization/Edge detection?
 
 ### Tools:
 
