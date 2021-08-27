@@ -20,6 +20,8 @@ class URLDumper:
     def run(self):
         # first create db engine
         # engine = sqlalchemy.create_engine(connection_string)
+        # then create connection
+        # then do a batch insert of all objects
         pass
 
 
