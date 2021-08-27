@@ -1,6 +1,12 @@
 from selenium import webdriver
 from time import sleep
 
+'''
+This is a google image web scraper developed using selenium.
+It turns out that all of this scraping is actualy pointless lol.
+Google offers an api to search for their images.
+'''
+
 
 class ImageURLScraper:
 
