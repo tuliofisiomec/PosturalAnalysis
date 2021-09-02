@@ -19,10 +19,16 @@ class URLDumper:
     
     def run(self):
         # first create db engine
-        # engine = sqlalchemy.create_engine(connection_string)
-        # then create connection
-        # then do a batch insert of all objects
-        pass
+        engine = sqlalchemy.create_engine(self.DB_CONNECTION_STRING.format(
+            username=self.DB_USERNAME, 
+            password=self.DB_PASSWORD,
+            db_url=self.DB_URL,
+            db_name=self.DB_NAME
+        ))
+        conn = engine.connect()
+        res = conn.execute("SELECT VERSION()")
+        for r in res:
+            print(r)
 
 
 class URLGetter:
@@ -71,6 +77,9 @@ class URLGetter:
 
 
 if __name__ == '__main__':
-    url_getter = URLGetter(1000, 'dogs')
-    urls = url_getter.get_urls()
-    print(urls)
+    # current limit is around 200 images
+    # url_getter = URLGetter(190, 'rounded shoulder posture vs normal')
+    # urls = url_getter.get_urls()
+    # print(urls)
+    url_dumper = URLDumper([])
+    url_dumper.run()
