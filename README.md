@@ -1,6 +1,6 @@
 # Postural Analysis
 
-![app architechture](AppArchitecture.png)
+![app architechture](ProjectImages/AppArchitecture.png)
 
 ## Goal:
 
@@ -24,7 +24,7 @@ Scrape Google images for data
 
 ### URL table
 
-![url table](UrlTable.png)
+![url table](ProjectImages/UrlTable.png)
 
 ### Tools:
 
