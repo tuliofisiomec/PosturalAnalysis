@@ -1,8 +1,19 @@
 import requests
 import os
-import sqlalchemy
+from sqlalchemy import create_engine, Column, Integer, String, Boolean
+from sqlalchemy.orm import declarative_base, sessionmaker
 from dotenv import load_dotenv
 load_dotenv()
+Base = declarative_base()
+
+
+class ImageURLRecord(Base):
+
+    __tablename__ = 'image_urls'
+    id = Column(Integer, primary_key=True)
+    search_query = Column(String)
+    image_url = Column(String)
+    downloaded = Column(Boolean)
 
 
 class URLDumper:
@@ -10,25 +21,38 @@ class URLDumper:
     Pass in list of objects to dump to postgres database in constructor
     '''
     def __init__(self, url_objects: list):
+        ''' each url_obj will be formated as such:
+        {
+            'search_query': <query>,
+            'url': <url>,
+            'downloaded': False
+        }
+        '''
         self.url_objects = url_objects
-        self.DB_USERNAME = os.getenv('DB_USERNAME')
-        self.DB_PASSWORD = os.getenv('DB_PASSWORD')
-        self.DB_URL = os.getenv('DB_URL')
-        self.DB_NAME = os.getenv('DB_NAME')
         self.DB_CONNECTION_STRING = 'postgresql://{username}:{password}@{db_url}/{db_name}'
+        self.engine = create_engine(
+            self.DB_CONNECTION_STRING.format(
+            username=os.getenv('DB_USERNAME'), 
+            password=os.getenv('DB_PASSWORD'),
+            db_url=os.getenv('DB_URL'),
+            db_name=os.getenv('DB_NAME')
+        ))
+        
     
     def run(self):
-        # first create db engine
-        engine = sqlalchemy.create_engine(self.DB_CONNECTION_STRING.format(
-            username=self.DB_USERNAME, 
-            password=self.DB_PASSWORD,
-            db_url=self.DB_URL,
-            db_name=self.DB_NAME
-        ))
-        conn = engine.connect()
-        res = conn.execute("SELECT VERSION()")
-        for r in res:
-            print(r)
+        Session = sessionmaker(bind=self.engine)
+        session = Session()
+        count = 1
+        for obj in self.url_objects:
+            print('inserting record number:', count)
+            count += 1
+            img_url_rec = ImageURLRecord(
+                search_query=obj['search_query'], 
+                image_url=obj['image_url'], 
+                downloaded=obj['downloaded']
+            )
+            session.add(img_url_rec)
+        session.commit()
 
 
 class URLGetter:
@@ -80,6 +104,11 @@ if __name__ == '__main__':
     # current limit is around 200 images
     # url_getter = URLGetter(190, 'rounded shoulder posture vs normal')
     # urls = url_getter.get_urls()
-    # print(urls)
-    url_dumper = URLDumper([])
+    # print(urls[:3])
+    url_dumper = URLDumper([
+        {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
+        {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
+        {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
+        {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False}
+    ])
     url_dumper.run()
