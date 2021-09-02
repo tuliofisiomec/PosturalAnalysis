@@ -102,13 +102,14 @@ class URLGetter:
 
 if __name__ == '__main__':
     # current limit is around 200 images
-    # url_getter = URLGetter(190, 'rounded shoulder posture vs normal')
-    # urls = url_getter.get_urls()
-    # print(urls[:3])
-    url_dumper = URLDumper([
-        {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
-        {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
-        {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
-        {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False}
-    ])
+    url_getter = URLGetter(190, 'rounded shoulder posture vs normal')
+    urls = url_getter.get_urls()
+    print(urls[:3])
+    # url_dumper = URLDumper([
+    #     {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
+    #     {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
+    #     {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False},
+    #     {'image_url': 'hellothere', 'search_query': 'spongebob', 'downloaded': False}
+    # ])
+    url_dumper = URLDumper(urls)
     url_dumper.run()
